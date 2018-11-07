@@ -1,0 +1,43 @@
+---
+title: Emitting Custom App Metrics to the Custom Metric Registrar
+owner: Metric Registrar
+---
+
+This topic describes how to install the Custom Metric Registrar CLI Plugin and emit custom app metrics to the Custom Metric Registrar by registering your app as a metric source. Registering your app as a metric source allows you to see your custom metrics in [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and configure autoscaling rules with [PCF Autoscaler](https://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html). 
+
+## <a id="install-plugin"></a> Install the Plugin
+
+Install the Metric Registrar CLI Plugin by running the following command:
+
+```
+cf install-plugin -r CF-Community "metric-registrar"
+```
+## <a id="register"></a> Register Your App
+
+To register your app as a metric source, do one of the following:
+
+* Register custom metrics endpoints to be parsed and emitted to the Loggregator. 
+* Register a structured log format that can be emitted to Loggregator.
+
+### <a id="register-endpoint"></a> Register a Metrics Endpoint
+
+The Custom Metric Registrar supports custom metrics created with the open-source tool [Prometheus](https://prometheus.io/). For examples of apps that use Prometheus to publish metrics to an endpoint, see the [metric-registrar-examples ](https://github.com/pivotal-cf/metric-registrar-examples) repository.
+
+<p class="note"><strong>Note</strong>: These endpoints are not secure.</p>
+
+For each Prometheus endpoint in your app, run the following command to register the endpoint as a metric source:
+
+```
+ cf register-metrics-endpoint APPNAME PATH
+```  
+
+### <a id="register-log-format"></a> Register a Structured Log Format
+
+The Custom Metric Registrar supports metrics emitted in JSON or [DogStatsD](https://docs.datadoghq.com/developers/dogstatsd/) formats.
+
+Run the following command to register your app as a metric source:
+
+```
+cf register-log-format APPNAME FORMAT
+```
+Where `FORMAT` is either `json` or `DogStatsD`. 
