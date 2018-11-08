@@ -5,11 +5,9 @@ owner: registrar
 
 This topic describes the Custom Metric Registrar. 
 
-## Overview 
+## <a id="overview"></a> Overview 
 
 The Custom Metric Registrar allows app developers to export custom app metrics in a format that the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/loggregator/architecture.html#firehose) can consume. App developers can then use the custom metrics to monitor apps with [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and configure autoscaling rules with [PCF Autoscaler](https://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html). 
-
-
 
 App developers can export custom metrics to the Firehose by configuring their apps in one of the following ways:
 
@@ -18,12 +16,18 @@ App developers can export custom metrics to the Firehose by configuring their ap
 * **Structured Log**
 	* Modify your app to emit metrics using a specific JSON or DogStatsD format. The Custom Metric Registrar then converts all matching log messages into Loggregator metrics or events.
 
-## Architecture 
+## <a id="architecture"></a> Architecture 
+
+The following diagram illustrates how the custom metrics registrar sends your custom app metrics to loggregator. The components of the custom metrics registrar are as follows:
+
+* The cf CLI pluigin 
+* The `metric_registrar_endpoint_worker` and `metric_registrar_log_worker` jobs running on the Doppler VM of the PAS deployment. 
+* The `metric_registrar_orchestrator` and `metric_registrar_smoke_test` jobs running on the Clock Global VM of the PAS deployment. 
 
 [//]: https://docs.google.com/drawings/d/1A-1bwP3TuHtEDEg1I_68C3VsEKuCITNWDE-oVB9S0HU/edit?usp=sharing
 ![Metric Registrar Architecture Diagram](metrics-registrar-architecture.png)
 
-## Configure the Custom Metric Registrar 
+## <a id="configure"></a> Configure the Custom Metric Registrar 
 
 The PAS tile includes a configuration pane for the Custom Metric Registrar. You can configure the Custom Metric Registrar in the following ways:
 
@@ -31,14 +35,14 @@ The PAS tile includes a configuration pane for the Custom Metric Registrar. You 
 * Edit default scraping interval
 * Add blacklisted tags
 
-### Disable the Custom Metric Registrar
+### <a id="disable"></a> Disable the Custom Metric Registrar
 
 The PAS tile deploys the Custom Metric Registrar by default. To disable the Custom Metric Registrar, select the **Disable Metric Registrar** checkbox. 
 
-### Edit default scraping interval
+### <a id="scraping-interval"></a> Edit default scraping interval
 
 The scraping interval defines how often the Custom Metric Registrar polls custom metric endpoints. The default is 35 seconds. To edit the scraping interval, use the **Endpoint Scraping Interval** field. 
 
-### Add blacklisted tags
+### <a id="blacklisted-tags"></a> Add blacklisted tags
 
 With the **Blacklisted Tags** field, you can define a comma-separated list of tags that users are not allowed to set on their emitted metrics.
