@@ -12,16 +12,19 @@ Install the Metric Registrar CLI Plugin by running the following command:
 ```
 cf install-plugin -r CF-Community "metric-registrar"
 ```
+
 ## <a id="register"></a> Register Your App
 
 To register your app as a metric source, do one of the following:
 
-* Register custom metrics endpoints to be parsed and emitted to the Loggregator. 
+* Register a public endpoint for custom metrics to be parsed and emitted to the Loggregator. 
 * Register a structured log format that can be emitted to Loggregator.
 
-### <a id="register-endpoint"></a> Register a Metrics Endpoint
+### <a id="register-endpoint"></a> Register a Public Metrics Endpoint
 
-The Custom Metric Registrar supports custom metrics created with the open-source tool [Prometheus](https://prometheus.io/). For examples of apps that use Prometheus to publish metrics to an endpoint, see the [metric-registrar-examples ](https://github.com/pivotal-cf/metric-registrar-examples) repository.
+The Custom Metric Registrar supports custom metrics created with the open-source tool [Prometheus](https://prometheus.io/). Prometheus uses a response format common in many open source libraries. It also provides several out-of-the-box metrics. 
+
+For examples of apps that use Prometheus to publish metrics to an endpoint, see the [metric-registrar-examples ](https://github.com/pivotal-cf/metric-registrar-examples) repository.
 
 <p class="note"><strong>Note</strong>: These endpoints must be public for the Custom Metric Registrar to retrieve the data. If you do not want to expose public endpoints for your app, use the Structured Log Format option instead.</p>
 
@@ -33,7 +36,7 @@ For each Prometheus endpoint in your app, run the following command to register 
 
 ### <a id="register-log-format"></a> Register a Structured Log Format
 
-The Custom Metric Registrar supports metrics emitted in JSON or [DogStatsD](https://docs.datadoghq.com/developers/dogstatsd/) formats.
+The Custom Metric Registrar supports metrics emitted in JSON or [DogStatsD](https://docs.datadoghq.com/developers/dogstatsd/) formats. See the [JSON](#json) and [DogStatsD](#dogstatsd) sections below to know what format the Custom Metric Registrar requires. 
 
 Run the following command to register your app as a metric source:
 
@@ -41,3 +44,92 @@ Run the following command to register your app as a metric source:
 cf register-log-format APPNAME FORMAT
 ```
 Where `FORMAT` is either `json` or `DogStatsD`. 
+
+#### <a id="json"></a> JSON
+
+The table below shows the supported JSON format for event, gauge, and counter log types. 
+
+<table>
+<tr>
+	<th>Type</th>
+	<th>Format</th>
+</tr>
+<tr>
+	<td>Events</td>
+	<td><pre>{
+  "type": "event",
+  "title": "title",
+  "body": "body",
+  "tags": {
+    "tag1": "tag value"
+  }
+}</pre></td>
+</tr>
+<tr>
+	<td>Gauges</td>
+	<td><pre>{
+  "type": "gauge",
+  "name": "some-counter",
+  "value": <float>,
+  "tags": {
+    "tag1": "tag value"
+  }
+}</pre></td>
+</tr>
+<tr>
+	<td>Counters</td>
+	<td><pre>{
+  "type": "counter",
+  "name": "some-counter",
+  "delta": <uint>,
+  "tags": {
+    "tag1": "tag value"
+  }
+}</pre></td>
+</tr>
+
+</table>
+
+#### <a id="dogstatsd"></a> DogStatsD
+
+The table below shows the supported DogStatsD format for event, gauge, and counter log types. It also lists the supported fields.
+
+<table>
+<tr>
+	<th>Type</th>
+	<th>Format</th>
+	<th>Supported Fields</th>
+</tr>
+<tr>
+	<td>Events</td>
+	<td><pre>_e{title.length,text.length}:title|text|d:timestamp|</br>h:hostname|p:priority|t:alert_type|#tag1,tag2</pre>
+	</td>
+	<td>
+		
+			<code>title</code><br>
+			<code>text</code>
+		
+	</td>
+</tr>
+<tr>
+	<td>Gauges</td>
+	<td><pre>gauge.name:value|g|@sample_rate|#tag1:value,tag2</pre></td>
+	<td>
+		
+			<code>gauge.name</code><br>
+			<code>value</code>
+		
+	</td>
+</tr>
+<tr>
+	<td>Counters</td>
+	<td><pre>counter.name:value|c|@sample_rate|#tag1:value,tag2</pre></td>
+	<td>
+		
+			<code>counter.name</code><br>
+			<code>value</code>
+		
+	</td>
+</tr>
+
+</table>

@@ -7,7 +7,7 @@ This topic describes the Custom Metric Registrar.
 
 ## <a id="overview"></a> Overview 
 
-The Custom Metric Registrar allows app developers to export custom app metrics in a format that the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/loggregator/architecture.html#firehose) can consume. App developers can then use the custom metrics to monitor apps with [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and configure autoscaling rules with [PCF Autoscaler](https://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html). 
+The Custom Metric Registrar allows app developers to export custom app metrics and events in a format that the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/loggregator/architecture.html#firehose) can consume. App developers can then use the custom metrics to monitor apps with [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and configure autoscaling rules with [PCF Autoscaler](https://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html). 
 
 App developers can export custom metrics to the Firehose by configuring their apps in one of the following ways:
 
@@ -45,4 +45,15 @@ The scraping interval defines how often the Custom Metric Registrar polls custom
 
 ### <a id="blacklisted-tags"></a> Add blacklisted tags
 
-With the **Blacklisted Tags** field, you can define a comma-separated list of tags that users are not allowed to set on their emitted metrics.
+With the **Blacklisted Tags** field, you can specify metrics tags for which you do not want the Custom Metric Registrar to consume the value. The field accepts a comme-separated list. 
+
+By default, the following tags are blacklisted to prevent interference with other products like PCF Metrics that use and rely on such tags.  
+
+```
+- deployment
+- job
+- index
+- id
+```
+
+You can add more blacklisted tags if you have specific ones you do not want the Custom Metric Registrar to consume. For example, if you tag your metrics with a `customer_id`, you may want to add `customer_id` to the list of blacklisted tags. 
