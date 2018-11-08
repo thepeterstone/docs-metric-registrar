@@ -7,12 +7,12 @@ This topic describes the Custom Metric Registrar.
 
 ## <a id="overview"></a> Overview 
 
-The Custom Metric Registrar allows app developers to export custom app metrics and events in a format that the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/loggregator/architecture.html#firehose) can consume. App developers can then use the custom metrics to monitor apps with [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and configure autoscaling rules with [PCF Autoscaler](https://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html). 
+The Custom Metric Registrar allows app developers to export custom app metrics and events in a format that [Loggregator](https://docs.pivotal.io/pivotalcf/loggregator/architecture.html) can consume. App developers can then use the custom metrics to monitor apps with [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and configure autoscaling rules with [PCF Autoscaler](https://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html). 
 
-App developers can export custom metrics to the Firehose by configuring their apps in one of the following ways:
+App developers can export custom metrics to Loggregator by configuring their apps in one of the following ways:
 
 * **Metrics Endpoint**
-	* Publish and register a metrics endpoint to an app. The Custom Metric Registrar will then poll this endpoint every 35 seconds and convert the metrics found in the response to Loggregator metrics. 
+	* Publish and register a Prometheus Exposition metrics endpoint to an app. The Custom Metric Registrar will then poll this endpoint every 35 seconds and convert the metrics found in the response to Loggregator metrics. 
 * **Structured Log**
 	* Modify your app to emit metrics using a specific JSON or DogStatsD format. The Custom Metric Registrar then converts all matching log messages into Loggregator metrics or events.
 
@@ -37,7 +37,7 @@ The PAS tile includes a configuration pane for the Custom Metric Registrar. You 
 
 ### <a id="disable"></a> Disable the Custom Metric Registrar
 
-The PAS tile deploys the Custom Metric Registrar by default. To disable the Custom Metric Registrar, select the **Disable Metric Registrar** checkbox. 
+The PAS tile does not deploy the Custom Metric Registrar by default. To enable the Custom Metric Registrar, uncheck the **Disable Metric Registrar** checkbox. 
 
 ### <a id="scraping-interval"></a> Edit default scraping interval
 
