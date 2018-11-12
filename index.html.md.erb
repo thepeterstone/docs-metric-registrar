@@ -3,7 +3,7 @@ title: Custom Metric Registrar
 owner: registrar
 ---
 
-This topic describes the Custom Metric Registrar. 
+This topic describes the Custom Metric Registrar for Pivotal Application Service (PAS). 
 
 ## <a id="overview"></a> Overview 
 
@@ -16,13 +16,15 @@ App developers can export custom metrics to Loggregator by configuring their app
 * **Structured Log**
 	* Modify your app to emit metrics using a specific JSON or DogStatsD format. The Custom Metric Registrar then converts all matching log messages into Loggregator metrics or events.
 
+For more information about installing the Custom Metric Registrar Plugin and registering your app, see [Emitting Custom App Metrics to the Custom Metric Registrar](./using.html).
+
 ## <a id="architecture"></a> Architecture 
 
-The following diagram illustrates how the custom metrics registrar sends your custom app metrics to loggregator. The components of the custom metrics registrar are as follows:
+The following diagram illustrates how the Custom Metric Registrar sends your custom app metrics to Loggregator. The components of the Custom Metric Registrar are as follows:
 
-* The cf CLI pluigin 
-* The `metric_registrar_endpoint_worker` and `metric_registrar_log_worker` jobs running on the Doppler VM of the PAS deployment. 
-* The `metric_registrar_orchestrator` and `metric_registrar_smoke_test` jobs running on the Clock Global VM of the PAS deployment. 
+* The cf CLI plugin 
+* The `metric_registrar_endpoint_worker` and `metric_registrar_log_worker` jobs running on the Doppler VM of the PAS deployment
+* The `metric_registrar_orchestrator` and `metric_registrar_smoke_test` jobs running on the Clock Global VM of the PAS deployment
 
 [//]: https://docs.google.com/drawings/d/1A-1bwP3TuHtEDEg1I_68C3VsEKuCITNWDE-oVB9S0HU/edit?usp=sharing
 ![Metric Registrar Architecture Diagram](metrics-registrar-architecture.png)
@@ -31,7 +33,7 @@ The following diagram illustrates how the custom metrics registrar sends your cu
 
 The PAS tile includes a configuration pane for the Custom Metric Registrar. You can configure the Custom Metric Registrar in the following ways:
 
-* Disable
+* Enable
 * Edit default scraping interval
 * Add blacklisted tags
 
@@ -39,13 +41,13 @@ The PAS tile includes a configuration pane for the Custom Metric Registrar. You 
 
 The PAS tile does not deploy the Custom Metric Registrar by default. To enable the Custom Metric Registrar, uncheck the **Disable Metric Registrar** checkbox. 
 
-### <a id="scraping-interval"></a> Edit default scraping interval
+### <a id="scraping-interval"></a> Edit Default Scraping Interval
 
-The scraping interval defines how often the Custom Metric Registrar polls custom metric endpoints. The default is 35 seconds. To edit the scraping interval, use the **Endpoint Scraping Interval** field. 
+The scraping interval defines how often the Custom Metric Registrar polls custom metric endpoints. The default is 35 seconds. To change the scraping interval, edit the **Endpoint Scraping Interval** field. 
 
-### <a id="blacklisted-tags"></a> Add blacklisted tags
+### <a id="blacklisted-tags"></a> Add Blacklisted Tags
 
-With the **Blacklisted Tags** field, you can specify metrics tags for which you do not want the Custom Metric Registrar to consume the value. The field accepts a comme-separated list. 
+To prevent the Custom Metric Registrar from consuming the value of a metric tag, you can add the tag to the **Blacklisted Tags** field. For example, if you tag your metrics with a `customer_id`, you may want to add `customer_id` to the list of blacklisted tags. The field accepts a comma-separated list.
 
 By default, the following tags are blacklisted to prevent interference with other products like PCF Metrics that use and rely on such tags.  
 
@@ -54,6 +56,4 @@ By default, the following tags are blacklisted to prevent interference with othe
 - job
 - index
 - id
-```
-
-You can add more blacklisted tags if you have specific ones you do not want the Custom Metric Registrar to consume. For example, if you tag your metrics with a `customer_id`, you may want to add `customer_id` to the list of blacklisted tags. 
+``` 
