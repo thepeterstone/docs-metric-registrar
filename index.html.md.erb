@@ -11,10 +11,8 @@ The Metric Registrar allows app developers to export custom app metrics in a for
 
 App developers can export custom metrics to Loggregator by configuring their apps in one of the following ways:
 
-* **Metrics Endpoint**
-	* Publish and register a Prometheus Exposition metrics endpoint to an app. The Metric Registrar will then poll this endpoint every 35 seconds and convert the metrics found in the response to Loggregator metrics. 
-* **Structured Log**
-	* Modify your app to emit metrics using a specific JSON or DogStatsD format. The Metric Registrar then converts all matching log messages into Loggregator metrics or events.
+* **Metrics Endpoint---**Publish and register a Prometheus Exposition metrics endpoint to an app. The Metric Registrar will then poll this endpoint every 35 seconds and convert the metrics found in the response to Loggregator metrics. 
+* **Structured Log---**Modify your app to emit metrics using a specific JSON or DogStatsD format. The Metric Registrar then converts all matching log messages into Loggregator metrics or events.
 
 For more information about installing the Metric Registrar Plugin and registering your app, see [Emitting Custom App Metrics to the Metric Registrar](./using.html).
 
@@ -26,8 +24,11 @@ The following diagram illustrates how the Metric Registrar sends your custom app
 * The `metric_registrar_endpoint_worker` and `metric_registrar_log_worker` jobs running on the Doppler VM of the PAS deployment
 * The `metric_registrar_orchestrator` and `metric_registrar_smoke_test` jobs running on the Clock Global VM of the PAS deployment
 
-[//]: https://docs.google.com/drawings/d/1A-1bwP3TuHtEDEg1I_68C3VsEKuCITNWDE-oVB9S0HU/edit?usp=sharing
-![Metric Registrar Architecture Diagram](metrics-registrar-architecture.png)
+<%# To edit the image, see https://docs.google.com/drawings/d/1A-1bwP3TuHtEDEg1I_68C3VsEKuCITNWDE-oVB9S0HU/edit?usp=sharing %>
+<a target="_blank" href="./images/metrics-registrar-architecture.png"><img src="./images/metrics-registrar-architecture.png" alt="Metric Registrar Architecture Diagram"></a>
+
+Click the image for a larger representation.
+
 
 ## <a id="configure"></a> Configure the Metric Registrar 
 
@@ -51,9 +52,7 @@ To prevent the Metric Registrar from consuming the value of a metric or event ta
 
 By default, the following tags are blacklisted to prevent interference with other products like PCF Metrics that use and rely on such tags.  
 
-```
-- deployment
-- job
-- index
-- id
-``` 
+- `deployment`
+- `job`
+- `index`
+- `id`
