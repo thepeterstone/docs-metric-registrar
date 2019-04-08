@@ -5,49 +5,96 @@ owner: Metric Registrar
 This topic describes how to install the Metric Registrar CLI plugin and emit custom app
 metrics to the Metric Registrar by registering your app as a metric source.
 
+## <a id="overview"></a> Overview
+
 Registering your app as a metric source allows you to see your custom metrics in PCF
 Metrics and configure autoscaling rules with PCF
-Autoscaler. For more information about these products, see the [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and [PCF Autoscaler](../appsman-services/autoscaler/using-autoscaler.html) documentation. 
+Autoscaler. 
+
+For more information, see [PCF Metrics](https://docs.pivotal.io/pcf-metrics) and [PCF Autoscaler](../appsman-services/autoscaler/using-autoscaler.html). 
 
 ## <a id="install-plugin"></a> Install the Plugin
 
-Install the Metric Registrar CLI plugin by running the following command:
+To install the Metric Registrar CLI plugin, do the following:
 
-```
-cf install-plugin -r CF-Community "metric-registrar"
-```
+1. Log in to the Cloud Foundry Command Line Interface (cf CLI).
+
+1. Run the following command:
+
+	```
+	cf install-plugin -r CF-Community "metric-registrar"
+	```
 
 ## <a id="register"></a> Register Your App
 
 To register your app as a metric source, do one of the following:
 
-* Register a public endpoint for custom metrics to be parsed and emitted to the Loggregator. 
-* Register a structured log format that can be emitted to Loggregator.
+* Register a public endpoint for custom metrics to be parsed and emitted to the Loggregator. See [Register a Public Metrics Endpoint](#register-endpoint).
+* Register a structured log format that can be emitted to Loggregator. See [Register a Structured Log Format](#register-log-format).
+
+<p class='note'><b>Note: </b> If you are migrating from and manually send data to Metrics Forwarder for PCF, Pivotal recommends registering a structured log format. See <a href="#register-log-format">Register a Structured Log Format.</p>
 
 ### <a id="register-endpoint"></a> Register a Public Metrics Endpoint
 
 The Metric Registrar supports custom metrics created with the open-source tool Prometheus. Prometheus uses a response format common in many open-source libraries. It also provides several out-of-the-box metrics. For more information about Prometheus, see [prometheus.io](https://prometheus.io/). 
 
-For examples of apps that use Prometheus to publish metrics to an endpoint, see the [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples) repository.
+For examples of apps that use Prometheus to publish metrics to an endpoint, see [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples) in GitHub.
 
 <p class="note"><strong>Note</strong>: These endpoints must be public for the Metric Registrar to retrieve the data. If you do not want to expose public endpoints for your app, see <a href="#register-log-format">Register a Structured Log Format</a> below.</p>
 
-For each Prometheus endpoint in your app, run the following command to register the endpoint as a metric source:
+#### <a id="prerequisites"></a> Prerequisites
 
-```
- cf register-metrics-endpoint APP-NAME PATH
-```  
+Before registering a public metrics endpoint, you must do the following:
+
+* For all Spring apps, update the `application.yml` file to include one or more Prometheus endpoints. For example:
+
+	```
+	management:
+	  endpoints:
+	    web:
+	      exposure:
+	        include: "metrics,prometheus"
+	  endpoint:
+	    metrics:
+	      enabled: true
+	    prometheus:
+	      enabled: true
+	```
+
+* For all Spring apps, update the security configuration file to permit access to the Prometheus endpoints. For an example, see [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples/blob/master/java-spring-security/src/main/java/io/pivotal/metric_registrar/examples/spring_security/SecurityConfig.java) in GitHub.
+
+#### <a id="endpoint-procedure"></a> Register an Endpoint
+
+To register a public metrics endpoint for an app, do the following:
+
+1. Log in to the cf CLI.
+
+1. For each Prometheus endpoint in your app, run the following command to register the endpoint as a metric source:
+
+	```
+	 cf register-metrics-endpoint APP-NAME PATH
+	```  
+	Where:
+	* `APP-NAME` is the name of the app.
+	* `PATH` is the path to the Prometheus endpoint.
 
 ### <a id="register-log-format"></a> Register a Structured Log Format
 
 The Metric Registrar supports metrics emitted in JSON or DogStatsD formats. For more information about these formats, see the [JSON](#json) and [DogStatsD](#dogstatsd) sections below. 
 
-Run the following command to register your app as a metric source:
+To register register your app as a metric source, do the following:
 
-```
-cf register-log-format APPNAME FORMAT
-```
-Where `FORMAT` is either `json` or `DogStatsD`. 
+1. Log in to the cf CLI.
+
+1. Run the following command:
+
+	```
+	cf register-log-format APP-NAME FORMAT
+	```
+
+	Where:
+	* `APP-NAME` is the name of the app.
+	* `FORMAT` is either `json` or `DogStatsD`. 
 
 #### <a id="json"></a> JSON
 
