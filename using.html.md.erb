@@ -96,6 +96,8 @@ To register register your app as a metric source, do the following:
 	* `APP-NAME` is the name of the app.
 	* `FORMAT` is either `json` or `DogStatsD`. 
 
+1. From your application, log a structured `json` or `DogStatsD` message to represent the custom metric.
+
 #### <a id="json"></a> JSON
 
 The table below shows the supported JSON format for event, gauge, and counter log types. 
