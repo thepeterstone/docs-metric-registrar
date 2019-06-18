@@ -1,5 +1,5 @@
 ---
-title: Registering Custom App Metrics
+title: Registering and Emitting Custom App Metrics
 owner: Metric Registrar
 ---
 This topic describes how to install the Metric Registrar CLI plugin and emit custom app
@@ -36,7 +36,7 @@ To register your app as a metric source, do one of the following:
 
 ### <a id="register-endpoint"></a> Register a Public Metrics Endpoint
 
-The Metric Registrar supports custom metrics created with the open-source tool Prometheus. Prometheus uses a response format common in many open-source libraries. It also provides several out-of-the-box metrics. For more information about Prometheus, see [prometheus.io](https://prometheus.io/). 
+The Metric Registrar supports custom metrics created with the open-source tool Prometheus. Prometheus uses a [text-based exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/#text-based-format) common in many [open-source libraries](https://prometheus.io/docs/instrumenting/clientlibs/). It also provides several out-of-the-box metrics for different programming languages. For more information about Prometheus, see [prometheus.io](https://prometheus.io/). 
 
 For examples of apps that use Prometheus to publish metrics to an endpoint, see [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples) in GitHub.
 
@@ -63,6 +63,8 @@ Before registering a public metrics endpoint, you must do the following:
 
 * For all Spring apps, update the security configuration file to permit access to the Prometheus endpoints. For an example, see [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples/blob/master/java-spring-security/src/main/java/io/pivotal/metric_registrar/examples/spring_security/SecurityConfig.java) in GitHub.
 
+* For all other apps, see [client libraries] provided by the open-source community.
+
 #### <a id="endpoint-procedure"></a> Register an Endpoint
 
 To register a public metrics endpoint for an app, do the following:
@@ -77,6 +79,12 @@ To register a public metrics endpoint for an app, do the following:
 	Where:
 	* `APP-NAME` is the name of the app.
 	* `PATH` is the path to the Prometheus endpoint.
+
+	For example, if the app name is `example` and the metrics endpoint lives at `https://example.com/metrics` the command would be:
+        
+        ```
+        cf register-metrics-endpoint example /metrics
+        ```
 
 ### <a id="register-log-format"></a> Register a Structured Log Format
 
