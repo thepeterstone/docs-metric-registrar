@@ -65,7 +65,7 @@ Before registering a public metrics endpoint, you must do the following:
 
 * For all other apps, see [client libraries] provided by the open-source community.
 
-#### <a id="endpoint-procedure"></a> Register an Endpoint
+#### <a id="endpoint-procedure"></a> Register a Public Metrics Endpoint
 
 To register a public metrics endpoint for an app, do the following:
 
@@ -85,6 +85,36 @@ To register a public metrics endpoint for an app, do the following:
         ```
         cf register-metrics-endpoint example /metrics
         ```
+
+#### <a id="endpoint-verify"></a> Verify a Public Metrics Endpoint
+
+We recommend that you install the LogCache cli plugin since it will allow you to view metrics.
+
+```
+cf install-plugin -r CF-Community "log-cache"
+```
+
+To view metrics for an app, run the following command:
+
+```
+cf tail --envelope-class=metrics <APP_NAME> 
+```
+
+For example, if you provided a custom metric called `users_per_cpu` as a gauge, you should see the following output:
+	
+```
+2019-06-18T10:49:28.27-0600 [app-name/1] GAUGE cpu:0.154763 percentage disk:14000128.000000 bytes disk_quota:33554432.000000 bytes memory:10190848.000000 bytes memory_quota:33554432.000000 bytes
+2019-06-18T10:49:26.42-0600 [app-name/1] GAUGE users_per_cpu:557.500000	
+```
+
+Where the first line is default container metrics and the second line is custom metrics `users_per_cpu`.
+
+<p class='note'><b>Note: </b> 
+	There is a known issue where the Metric Registrar will produce the following benign error message at every polling interval:
+	```
+	 [LGR/] ERR Invalid syslog drain URL: parse failure
+	```
+</p>
 
 ### <a id="register-log-format"></a> Register a Structured Log Format
 
