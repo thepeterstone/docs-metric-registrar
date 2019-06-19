@@ -1,5 +1,5 @@
 ---
-title: Registering Custom App Metrics
+title: Registering and Emitting Custom App Metrics
 owner: Metric Registrar
 ---
 This topic describes how to install the Metric Registrar CLI plugin and emit custom app
@@ -36,7 +36,7 @@ To register your app as a metric source, do one of the following:
 
 ### <a id="register-endpoint"></a> Register a Public Metrics Endpoint
 
-The Metric Registrar supports custom metrics created with the open-source tool Prometheus. Prometheus uses a response format common in many open-source libraries. It also provides several out-of-the-box metrics. For more information about Prometheus, see [prometheus.io](https://prometheus.io/). 
+The Metric Registrar supports custom metrics created with the open-source tool Prometheus. Prometheus uses a [text-based exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/#text-based-format) common in many [open-source libraries](https://prometheus.io/docs/instrumenting/clientlibs/). It also provides several out-of-the-box metrics for different programming languages. For more information about Prometheus, see [prometheus.io](https://prometheus.io/). 
 
 For examples of apps that use Prometheus to publish metrics to an endpoint, see [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples) in GitHub.
 
@@ -63,7 +63,9 @@ Before registering a public metrics endpoint, you must do the following:
 
 * For all Spring apps, update the security configuration file to permit access to the Prometheus endpoints. For an example, see [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples/blob/master/java-spring-security/src/main/java/io/pivotal/metric_registrar/examples/spring_security/SecurityConfig.java) in GitHub.
 
-#### <a id="endpoint-procedure"></a> Register an Endpoint
+* For all other apps, see [client libraries] provided by the open-source community.
+
+#### <a id="endpoint-procedure"></a> Register a Public Metrics Endpoint
 
 To register a public metrics endpoint for an app, do the following:
 
@@ -77,6 +79,42 @@ To register a public metrics endpoint for an app, do the following:
 	Where:
 	* `APP-NAME` is the name of the app.
 	* `PATH` is the path to the Prometheus endpoint.
+
+	For example, if the app name is `example` and the metrics endpoint lives at `https://example.com/metrics` the command would be:
+        
+        ```
+        cf register-metrics-endpoint example /metrics
+        ```
+
+#### <a id="endpoint-verify"></a> Verify a Public Metrics Endpoint
+
+We recommend that you install the LogCache cli plugin since it will allow you to view metrics.
+
+```
+cf install-plugin -r CF-Community "log-cache"
+```
+
+To view metrics for an app, run the following command:
+
+```
+cf tail --envelope-class=metrics <APP_NAME> 
+```
+
+For example, if you provided a custom metric called `users_per_cpu` as a gauge, you should see the following output:
+	
+```
+2019-06-18T10:49:28.27-0600 [app-name/1] GAUGE cpu:0.154763 percentage disk:14000128.000000 bytes disk_quota:33554432.000000 bytes memory:10190848.000000 bytes memory_quota:33554432.000000 bytes
+2019-06-18T10:49:26.42-0600 [app-name/1] GAUGE users_per_cpu:557.500000	
+```
+
+Where the first line is default container metrics and the second line is custom metrics `users_per_cpu`.
+
+<p class='note'><b>Note: </b> 
+	There is a known issue where the Metric Registrar will produce the following benign error message at every polling interval:
+	```
+	 [LGR/] ERR Invalid syslog drain URL: parse failure
+	```
+</p>
 
 ### <a id="register-log-format"></a> Register a Structured Log Format
 
