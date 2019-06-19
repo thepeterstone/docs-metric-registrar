@@ -29,14 +29,16 @@ To install the Metric Registrar CLI plugin, do the following:
 
 To register your app as a metric source, do one of the following:
 
-* **Register a public endpoint**: Register a public endpoint for custom metrics to be parsed and emitted to Loggregator. See [Register a Public Metrics Endpoint](#register-endpoint).
+* **Register a public endpoint**: Register a public endpoint for custom metrics to be parsed and emitted to Loggregator. See [Register a Public Metrics Endpoint](#register-endpoint) below.
 * **Register a structured log format**: Register a structured log format that can be emitted to Loggregator. See [Register a Structured Log Format](#register-log-format).
 
 <p class='note'><b>Note: </b> If you are migrating from and manually send data to Metrics Forwarder for PCF, Pivotal recommends registering a structured log format. See <a href="#register-log-format">Register a Structured Log Format.</p>
 
 ### <a id="register-endpoint"></a> Register a Public Metrics Endpoint
 
-The Metric Registrar supports custom metrics created with the open-source tool Prometheus. Prometheus uses a [text-based exposition format](https://prometheus.io/docs/instrumenting/exposition_formats/#text-based-format) common in many [open-source libraries](https://prometheus.io/docs/instrumenting/clientlibs/). It also provides several out-of-the-box metrics for different programming languages. For more information about Prometheus, see [prometheus.io](https://prometheus.io/). 
+The Metric Registrar supports custom metrics created with the open-source tool, Prometheus. Prometheus uses a text-based exposition format common in many open-source libraries. It also provides several out-of-the-box metrics for different programming languages.
+
+For more information about Prometheus, see [What is Prometheus?](https://prometheus.io/docs/introduction/overview/#what-is-prometheus) in the Prometheus documentation. 
 
 For examples of apps that use Prometheus to publish metrics to an endpoint, see [metric-registrar-examples](https://github.com/pivotal-cf/metric-registrar-examples) in GitHub.
 
@@ -88,33 +90,28 @@ To register a public metrics endpoint for an app, do the following:
 
 #### <a id="endpoint-verify"></a> Verify a Public Metrics Endpoint
 
-We recommend that you install the LogCache cli plugin since it will allow you to view metrics.
+Pivotal recommends that you install the LogCache cf CLI plugin to view metrics.
 
-```
-cf install-plugin -r CF-Community "log-cache"
-```
+To install and use the Log Cache cf CLI plugin, do the following:
 
-To view metrics for an app, run the following command:
+1. To install Log Cache, run the following command:
 
-```
-cf tail --envelope-class=metrics <APP_NAME> 
-```
+    ```
+    cf install-plugin -r CF-Community "log-cache"
+    ```
 
-For example, if you provided a custom metric called `users_per_cpu` as a gauge, you should see the following output:
+1. To view metrics for an app, run the following command:
+
+    ```
+    cf tail --envelope-class=metrics <APP_NAME> 
+    ```
+
+    For example, if you provided a custom metric called `users_per_cpu` as a gauge, you should see the following output:
 	
-```
-2019-06-18T10:49:28.27-0600 [app-name/1] GAUGE cpu:0.154763 percentage disk:14000128.000000 bytes disk_quota:33554432.000000 bytes memory:10190848.000000 bytes memory_quota:33554432.000000 bytes
-2019-06-18T10:49:26.42-0600 [app-name/1] GAUGE users_per_cpu:557.500000	
-```
+    <pre class="terminal">2019-06-18T10:49:28.27-0600 [app-name/1] GAUGE cpu:0.154763 percentage disk:14000128.000000 bytes disk_quota:33554432.000000 bytes memory:10190848.000000 bytes memory_quota:33554432.000000 bytes
+    2019-06-18T10:49:26.42-0600 [app-name/1] GAUGE users_per_cpu:557.500000</pre>
 
-Where the first line is default container metrics and the second line is custom metrics `users_per_cpu`.
-
-<p class='note'><b>Note: </b> 
-	There is a known issue where the Metric Registrar will produce the following benign error message at every polling interval:
-	```
-	 [LGR/] ERR Invalid syslog drain URL: parse failure
-	```
-</p>
+    Where the first line is default container metrics and the second line is custom metrics `users_per_cpu`. <p class='note'><strong>Note:</strong> The Metric Registrar produces the following benign error message at every polling interval: <code>[LGR/] ERR Invalid syslog drain URL: parse failure</code></p>
 
 ### <a id="register-log-format"></a> Register a Structured Log Format
 
