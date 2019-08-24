@@ -5,25 +5,28 @@ owner: registrar
 
 This topic describes the Metric Registrar for Pivotal Application Service (PAS). It also includes information about enabling and configuring the Metric Registrar. 
 
+
 ## <a id="overview"></a> Overview 
 
 The Metric Registrar allows app developers to export custom app metrics in a format that Loggregator can consume. App developers can then use the custom metrics to monitor apps with <%= vars.product_name %> Metrics and configure autoscaling rules with <%= vars.product_name %> Autoscaler. 
 
 App developers can export custom metrics to Loggregator by configuring their apps in one of the following ways:
 
-* **Metrics Endpoint---**Publish and register a Prometheus Exposition metrics endpoint to an app. The Metric Registrar will then poll this endpoint every 35 seconds and convert the metrics found in the response to Loggregator metrics. 
-* **Structured Log---**Modify your app to emit metrics using a specific JSON or DogStatsD format. The Metric Registrar then converts all matching log messages into Loggregator metrics or events.
+* **Metrics Endpoint:** Publish and register a Prometheus Exposition metrics endpoint to an app. The Metric Registrar will then poll this endpoint every 35 seconds and convert the metrics found in the response to Loggregator metrics. 
+* **Structured Log:** Modify your app to emit metrics using a specific JSON or DogStatsD format. The Metric Registrar then converts all matching log messages into Loggregator metrics or events.
 
 For more information about installing the Metric Registrar Plugin and registering your app, see [Emitting Custom App Metrics to the Metric Registrar](./using.html).
 
-For more information about the components and products mentioned, see the following:
+For more information about the components and products mentioned, see:
+
 - [Loggregator](https://docs.pivotal.io/pivotalcf/loggregator/architecture.html)
 - [<%= vars.product_name %> Metrics](https://docs.pivotal.io/pcf-metrics)
 - [<%= vars.product_name %> Autoscaler](https://docs.pivotal.io/pivotalcf/appsman-services/autoscaler/using-autoscaler.html)
 
+
 ## <a id="architecture"></a> Architecture 
 
-The following diagram illustrates how the Metric Registrar sends your custom app metrics to Loggregator. The components of the Metric Registrar are as follows:
+The following diagram illustrates how the Metric Registrar sends your custom app metrics to Loggregator. The components of the Metric Registrar are:
 
 * The cf CLI plugin 
 * The `metric_registrar_endpoint_worker` and `metric_registrar_log_worker` jobs running on the Doppler VM of the PAS deployment
