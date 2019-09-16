@@ -111,7 +111,7 @@ To install and use the Log Cache cf CLI plugin, do the following:
     <pre class="terminal">2019-06-18T10:49:28.27-0600 [app-name/1] GAUGE cpu:0.154763 percentage disk:14000128.000000 bytes disk_quota:33554432.000000 bytes memory:10190848.000000 bytes memory_quota:33554432.000000 bytes
     2019-06-18T10:49:26.42-0600 [app-name/1] GAUGE users_per_cpu:557.500000</pre>
 
-    Where the first line is default container metrics and the second line is custom metrics `users_per_cpu`. <p class='note'><strong>Note:</strong> The Metric Registrar produces the following benign error message at every polling interval: <code>[LGR/] ERR Invalid syslog drain URL: parse failure</code></p>
+    Where the first line is default container metrics and the second line is custom metrics `users_per_cpu`. <p class='note'><strong>Note:</strong> When using Metric Registrar, CF Syslog Drain produces the following benign error message at every polling interval: <code>[LGR/] ERR Invalid syslog drain URL: parse failure</code></p>
 
 ### <a id="register-log-format"></a> Register a Structured Log Format
 
